@@ -1,0 +1,19 @@
+2 ways of solving which pieces are taken on the path,
+ - Add a third element to each coordinate pair, in which during recursion, the number will increment each recursion, might distrupt iteration
+ - Make a HashSet<int[][]>, in which it will make it a little more difficult to use hashsets, but will not have the disadvantage of disrupting iteration
+
+
+FUCK, how are we going to deal with pathways, by this I mean two different jumps that lead to the same endpoint,
+add our new dimension for the pieces that move will kill, then to differentiate between two moves, fix our coordinate pairs by comparing all three dimensions, x, y, and the moves taken
+{
+	{x:5, y:7}, {
+		{x:6, y:6},
+		{x:4, y:6},
+		{x:6, y:8}
+	}
+}
+[1, [2]]
+HashSet<Integer, Integer>
+
+OR take a completely different approach and make a new datatype to hold all of this information, this is Java, not python
+not all solutions will be directly translatable

@@ -8,6 +8,7 @@ class Board {
 
 	//Gameboard ref under 2d grid
 	Checker[][] grid = new Checker[8][8];
+	
 	char[][] emptyGrid = {
 		{'⬜', '⬛', '⬜', '⬛', '⬜', '⬛', '⬜', '⬛'},
 		{'⬛', '⬜', '⬛', '⬜', '⬛', '⬜', '⬛', '⬜'},
@@ -54,7 +55,7 @@ class Board {
 		}
 	}
 //***************************************************************
-	
+	//Coordinate Editing Methods
 	public int[] toCartesian(int x, int y) {
 		return new int[] {y+1, (7-x)+1};
 	}
@@ -63,12 +64,7 @@ class Board {
 		return new int[] {(7-y)+1, x-1};
 	}
 	
-	public void move(int x, int y, int dx, int dy) {
-		//Add checks with our python constructed getMoves method and add another method checkValidity to be used here
-		Checker temp = grid[x][y];
-		grid[dx][dy] = new Checker(temp.x, temp.y, temp.color);
-		grid[x][y] = null;
-	}	
+	
 
 	public int[][] getSurrounding(Checker[][] grid, int x, int y, char color) {
 		HashSet<int[]> surrounding = new HashSet<>(); // TODO Make 2d ints, [0] end coordinate, [1] pieces taken on the way
@@ -120,20 +116,28 @@ class Board {
 		
 	}
 
-	public int[][] cleanCoordinatePairs(int[][] original) {
-		List<Integer> iterateOverMeInstead = new ArrayList<>(Arrays.asList(intArray));
-		
-		int[][] used = new int[original.length][2]; //Might change 2 to 3, dunno, might be due to change
-		int index = 0;
-		
-		int[][] cleaned = new int[original.length][2]; //same-o
+	//Move Logic
+	public void move(int x, int y, int dx, int dy) {
+		//Add checks with our python constructed getMoves method and add another method checkValidity to be used here
+		Checker temp = grid[x][y];
+		grid[dx][dy] = new Checker(dx, dy, temp.color);
+		grid[x][y] = null;
+	}
 
-		for(int[] cdPair : iterateOverMeInstead) {
-			if(!used.contains(cdPair)) {
-				
-				index++;
-			}
-		}
+	public void move(int[] xy, int[] dxdy) { //given coordinate pairs
+		int x = xy[0];
+		int y = xy[1];
+		int dx = dxdy[0];
+		int dy = dxdy[1];
+		
+		move(x, y, dx, dy);
+	}
+
+	public void moveUsingCartesian(int x, int y, int dx, int dy) {
+		int[] xy = fromCartesian(x, y);
+		int[] dxdy = fromCartesian(dx, dy);
+		
+		move(xy, dxdy);
 	}
 	
 	//toString

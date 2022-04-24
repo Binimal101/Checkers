@@ -1,5 +1,0 @@
-
-Alright hear me out, we take moves step by step, the rules will follow, if you can take a piece, you must,
-this way during the game loop, when we double or triple jump one input at a time; forcing the user to go all the way with it.
-
-Also when using our move function, "move" the piece over the jumped piece just to displace it off the board.

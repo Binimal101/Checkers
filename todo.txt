@@ -1,0 +1,1 @@
+Make a moveAndTake, or measure distance in move function and decide accordingly

@@ -1,5 +1,5 @@
 //THIS IS MERELY FOR PRINTING
-class Moves {
+public class Moves {
 	Board board;
 	String typeMoves;
 	int[][] moves;

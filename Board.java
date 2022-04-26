@@ -1,7 +1,7 @@
 import java.lang.Character;
 import java.util.*;
 
-class Board {
+public class Board {
 	//Finals
 	private static final char B = '⬛';
  	private static final char W = '⬜';
@@ -218,11 +218,47 @@ class Board {
 			case "br":
 				return new int[] {x+1, y+1};
 			case "bl":
-				return new int[] {x-1, y-1};
+				return new int[] {x+1, y-1};
 				
 			default: 
 				return null;
 		}
+	}
+
+	public int blackCount() {
+		int count = 0;
+		
+		for(Checker[] row : grid) {
+			for(Checker checker : row) {
+				if(checker != null && Character.toUpperCase(checker.color) == 'B') {
+					count++;
+				}
+			}	
+		}
+		
+		return count;
+	}
+
+	public int whiteCount() {
+		int count = 0;
+		
+		for(Checker[] row : grid) {
+			for(Checker checker : row) {
+				if(checker != null && Character.toUpperCase(checker.color) == 'W') {
+					count++;
+				}
+			}	
+		}
+		
+		return count;
+	}
+	
+	public char getColorAt(int x, int y) {
+		return grid[x][y].color;
+	}
+
+	public boolean isNullAt(int x, int y) {
+		return grid[x][y] == null;
 	}
 
 	//Updates moveset attributes
@@ -232,6 +268,7 @@ class Board {
 				
 				Checker checker = grid[row][column];
 				if(checker != null) {
+					System.out.println(checker.x + " " + checker.y + " " + checker.color);
 					grid[row][column] = new Checker(this, checker.x, checker.y, checker.color);
 				}
 				
@@ -252,16 +289,6 @@ class Board {
 		
 		int[][] aroundPiece = getSurrounding(x, y, color); //Spaces around current piece that can be moved to given the piece color
 		
-		if(aroundPiece == null) { //Pieces that cannot move at all have no moves
-			int[] cart = toCartesian(x, y);
-			
-			System.out.println(cart[0]);
-			System.out.println(cart[1]);
-			System.out.println();
-			
-			return null;
-		}
-		
 		for(int[] cdPair : aroundPiece) {			
 			moveX = cdPair[0];
 			moveY = cdPair[1];
@@ -281,11 +308,11 @@ class Board {
 		finalMoveset[0] = moves.toArray(new int[moves.size()][2]);
 		finalMoveset[1] = taken.toArray(new int[moves.size()][2]); //moves is a list that will be parallel in length to taken
 		
-		if(finalMoveset.length == 0 || finalMoveset[0].length == 0 && finalMoveset[1].length == 0) { //
+		if(finalMoveset.length == 0 || finalMoveset[0].length == 0 && finalMoveset[1].length == 0) { //return null instead of returning null arrays
 			finalMoveset = null;
 		}
 		
-		return finalMoveset; // Creates a new integer array to fit return type
+		return finalMoveset;
 	}
 
 	public int[][] getMoves(int x, int y, char color) {
@@ -300,11 +327,15 @@ class Board {
 				moves.add(aroundPiece[i]);
 			}
 		}
+
+		if(moves.size() == 0) {
+			return null;
+		}
+		
 		return moves.toArray(new int[moves.size()][]);
 	}
 	
 	//Move Logic
-	
 	public boolean canMove(char color) {
 		for(int row = 0; row < grid.length; row++) {
 			for(int column = 0; column < grid[row].length; column++) {
@@ -340,11 +371,11 @@ class Board {
 	}
 
 	public boolean canMoveAt(int x, int y) {
-		return grid[x][y].moves.length > 0;
+		return grid[x][y].moves != null;
 	}
 	
 	public boolean canJumpAt(int x, int y) {
-		return grid[x][y].jumpableMoves.length > 0;
+		return grid[x][y].jumpableMoves != null;
 	}
 	
 	//Checks for a non-jumpable move
@@ -364,6 +395,11 @@ class Board {
 	//Checks for a jumpable move
 	public boolean isJumpableMove(int x, int y, int dx, int dy) {
 		Checker checker = grid[x][y];
+
+		if(checker.jumpableMoves == null) {
+			return false;
+		}
+		
 		for(int[] cdp : checker.jumpableMoves) {
 			int cdx = cdp[0];
 			int cdy = cdp[1];
@@ -374,17 +410,18 @@ class Board {
 		}
 		return false;
 	}
-
+// 7, 3
+// 8, 4
 	public boolean validMove(int x, int y, int dx, int dy) { //disallow moves if move invalid, or jump is available and not jump move
-		if(canJump(x, y)) {
+		if(canJump(grid[x][y].color)) {
 			if(isJumpableMove(x, y, dx, dy)) {
 				return true;
 			} else {
-				System.out.println("Error, need to jump ")
+				System.out.println("Error, you are required to jump this turn");
 				return false;
 			}
 			
-		} else if(canMove(x, y)) {
+		} else if(canMove(grid[x][y].color)) {
 			if(isMove(x, y, dx, dy)) {
 				return true;
 			} else {

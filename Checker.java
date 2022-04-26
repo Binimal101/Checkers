@@ -1,4 +1,4 @@
-class Checker {
+public class Checker {
 	
 	//Instance Variables
 	public int[][] moves;

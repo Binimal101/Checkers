@@ -1,11 +1,8 @@
-public class Checker {
+public class Checker implements java.io.Serializable {
 	
 	//Instance Variables
 	public int[][] moves;
-	
-	//Will be split into two from an original 3d list
 	public int[][] jumpableMoves;
-	public int[][] jumpableMovesTaken;
 	
 	public int x;
 	public int y;
@@ -20,12 +17,7 @@ public class Checker {
 		tryToKing(); //turn piece kinged if at desired location
 		
 		moves = board.getMoves(x, y, this.color);
-		
-		int[][][] placeholder = board.getJumpableMoves(x, y, this.color); //Unpacked in next lines
-		
-		jumpableMoves = (placeholder == null ? null : placeholder[0]);
-		jumpableMovesTaken = (placeholder == null ? null : placeholder[1]);
-			
+		jumpableMoves = board.getJumpableMoves(x, y, this.color);
 	}
 
 	//Instance Methods

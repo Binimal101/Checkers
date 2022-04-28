@@ -1,7 +1,7 @@
 import java.lang.Character;
 import java.util.*;
 
-public class Board {
+public class Board implements java.io.Serializable {
 	//Finals
 	private static final char B = '⬛';
  	private static final char W = '⬜';
@@ -56,6 +56,21 @@ public class Board {
 		updateBoard();
 
 	}
+
+	public Board(Board board) {
+		this.grid = board.returnGrid();
+		updateBoard();
+	}
+
+	public Board(Checker[][] grid) {
+		this.grid = grid;
+		updateBoard();
+	}
+	
+	public Checker[][] returnGrid() {
+		return grid;
+	}
+	
 //***************************************************************
 	public void printCoordinateMovePairs() {
 		for(Checker[] row : grid) {
@@ -268,7 +283,6 @@ public class Board {
 				
 				Checker checker = grid[row][column];
 				if(checker != null) {
-					System.out.println(checker.x + " " + checker.y + " " + checker.color);
 					grid[row][column] = new Checker(this, checker.x, checker.y, checker.color);
 				}
 				
@@ -277,7 +291,7 @@ public class Board {
 	}
 	
 	//Move Checks
-	public int[][][] getJumpableMoves(int x, int y, char color) { //Will get the moves the piece can make along with 
+	public int[][] getJumpableMoves(int x, int y, char color) { //Will get the moves the piece can make along with 
 		char enemyColor = ((color == 'B' || color == 'b') ? 'w' : 'b'); //Enemy color will always be represented as lowercase
 		
 		int[] finalPosition;
@@ -285,7 +299,6 @@ public class Board {
 		int moveX, moveY;
 		
 		ArrayList<int[]> moves = new ArrayList<int[]>();
-		ArrayList<int[]> taken = new ArrayList<int[]>();
 		
 		int[][] aroundPiece = getSurrounding(x, y, color); //Spaces around current piece that can be moved to given the piece color
 		
@@ -297,22 +310,23 @@ public class Board {
 				direction = getDirection(x, y, moveX, moveY, 1);
 				finalPosition = getNextPositionFrom(x, y, direction);
 				
+				if(finalPosition == null) { //meaning that the jump goes out of bounds
+					continue;
+				}
+				
 				if(grid[finalPosition[0]][finalPosition[1]] == null) { //Not a checker object
 					moves.add(finalPosition);
-					taken.add(cdPair);
 				}
 			}
 		}
-
-		int[][][] finalMoveset = new int[2][moves.size()][2];
-		finalMoveset[0] = moves.toArray(new int[moves.size()][2]);
-		finalMoveset[1] = taken.toArray(new int[moves.size()][2]); //moves is a list that will be parallel in length to taken
 		
-		if(finalMoveset.length == 0 || finalMoveset[0].length == 0 && finalMoveset[1].length == 0) { //return null instead of returning null arrays
-			finalMoveset = null;
+		int[][] fin;
+		fin = moves.toArray(new int[moves.size()][2]);
+		if(fin == null || fin.length == 0) { //return null instead of returning null arrays\ null.length doesn't exist
+			fin = null;
 		}
 		
-		return finalMoveset;
+		return fin;
 	}
 
 	public int[][] getMoves(int x, int y, char color) {
@@ -410,8 +424,8 @@ public class Board {
 		}
 		return false;
 	}
-// 7, 3
-// 8, 4
+
+	//Checks for moveValidity
 	public boolean validMove(int x, int y, int dx, int dy) { //disallow moves if move invalid, or jump is available and not jump move
 		if(canJump(grid[x][y].color)) {
 			if(isJumpableMove(x, y, dx, dy)) {
@@ -433,7 +447,8 @@ public class Board {
 		}
 		
 	}
-	
+
+	//Main move function, all moves will go through here
 	public void move(int x, int y, int dx, int dy) {
 		Checker start = grid[x][y];
 		grid[dx][dy] = new Checker(this, dx, dy, start.color);

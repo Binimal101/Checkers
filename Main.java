@@ -3,9 +3,10 @@ import java.util.Scanner;
 
 public class Main {
 	public static void main(String[] args) throws IOException {
-		
 		Scanner input = new Scanner(System.in);
 		String decision;
+		
+		CheckersGame.clearConsole();
 		
 		do {
 			System.out.print("1: New Game\n2: Saved Game\n>>> ");

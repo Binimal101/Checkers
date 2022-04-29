@@ -12,30 +12,29 @@ public class Serial<T> {
 	
 	public void serialize(String path) {
 		try {
-        	FileOutputStream fileOut = new FileOutputStream("saved/" + path + ".ser");
-        	ObjectOutputStream out = new ObjectOutputStream(fileOut);
-        	out.writeObject(object);
+        		FileOutputStream fileOut = new FileOutputStream("saved/" + path + ".ser");
+        		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+        		out.writeObject(object);
 			
-         	out.close();
+         		out.close();
+         		fileOut.close();
 			
-         	fileOut.close();
-			
-      	} catch (IOException i) {
-        	i.printStackTrace();
-      	}
+      		} catch (IOException i) {
+        		i.printStackTrace();
+      		}
 	}
 
 	public T deserialize(String path) {
 		try {
-        	FileInputStream fileIn = new FileInputStream("saved/" + path + ".ser");
-         	ObjectInputStream in = new ObjectInputStream(fileIn);
-			
-         	object = (T) in.readObject();
-			
+    			FileInputStream fileIn = new FileInputStream("saved/" + path + ".ser");
+     	 		ObjectInputStream in = new ObjectInputStream(fileIn);
+			//Cast to type T and return
+      			object = (T) in.readObject();
 			return object;
 			
-      	} catch (IOException i) {
-        	i.printStackTrace();
+      		} catch (IOException i) {
+        		i.printStackTrace();
+			
 		} catch (ClassNotFoundException i) {
 			i.printStackTrace();
 		}

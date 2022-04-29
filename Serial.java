@@ -17,7 +17,6 @@ public class Serial<T> {
         	out.writeObject(object);
 			
          	out.close();
-			
          	fileOut.close();
 			
       	} catch (IOException i) {
@@ -27,11 +26,10 @@ public class Serial<T> {
 
 	public T deserialize(String path) {
 		try {
-        	FileInputStream fileIn = new FileInputStream("saved/" + path + ".ser");
-         	ObjectInputStream in = new ObjectInputStream(fileIn);
-			
-         	object = (T) in.readObject();
-			
+    		FileInputStream fileIn = new FileInputStream("saved/" + path + ".ser");
+     	 	ObjectInputStream in = new ObjectInputStream(fileIn);
+			//Cast to type T and return
+      		object = (T) in.readObject();
 			return object;
 			
       	} catch (IOException i) {

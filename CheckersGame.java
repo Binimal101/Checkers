@@ -43,8 +43,7 @@ public class CheckersGame {
 		int turnsSinceLastJump = 0;
 		final int STALEMATEDELIMITER = 40;
 		
-		boolean valid = true;
-		while (path == null || !valid) {
+		while (path == null || !isAlpha(path)) {
 			System.out.print("Save game as:\n>>> ");
 			
 			path = input.nextLine(); 
@@ -260,6 +259,15 @@ public class CheckersGame {
 
 	public boolean withinBounds(int x, int y) { // 0, 7 as will be compared using non-cartesian coords
 		return (x >= 0 && x <= 7) && (y >= 0 && y <= 7);
+	}
+
+	public boolean isAlpha(String str) {
+		
+		if(str == null) {
+			return false;
+		}
+		
+    	return str.matches("[a-zA-Z]+");
 	}
 
 	public static void clearConsole() {

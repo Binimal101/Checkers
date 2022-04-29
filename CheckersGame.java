@@ -1,7 +1,8 @@
+import java.util.ArrayList;
 import java.util.Scanner;
-import java.lang.Character;
-import java.io.*;
 import java.nio.file.Files;
+import java.io.*;
+import java.lang.Character;
 
 public class CheckersGame {
 	// public's
@@ -41,10 +42,13 @@ public class CheckersGame {
 
 		int turnsSinceLastJump = 0;
 		final int STALEMATEDELIMITER = 40;
-
-		if (path == null) {
+		
+		boolean valid = true;
+		while (path == null || !valid) {
 			System.out.print("Save game as:\n>>> ");
-			path = input.nextLine(); // TODO add redundancy
+			
+			path = input.nextLine(); 
+			
 			System.out.println();
 			clearConsole();
 		}
@@ -250,8 +254,7 @@ public class CheckersGame {
 	}
 
 	public boolean isAllowedToControl(String player, int x, int y) {
-		char playerColor = player.charAt(0); // player will only ever be "White" or "Black" index 0 represents their
-												// color
+		char playerColor = player.charAt(0); // player will only ever be "White" or "Black" index 0 represents their color
 		return Character.toUpperCase(board.getColorAt(x, y)) == playerColor;
 	}
 
@@ -260,8 +263,7 @@ public class CheckersGame {
 	}
 
 	public static void clearConsole() {
-		System.out.print(
-				"\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
+		System.out.print("\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n");
 		System.out.flush();
 	}
 

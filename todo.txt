@@ -1,7 +1,9 @@
-start a jump tree that starts after first jump if can jump at dx, dy (iterative approach)
-make methods in Board class to see if moves exist for a certain color.
+Make a input system that updates better when inputting coordinates
+add redundancy for saving files, along with a back option when naming a savefile
+
+add row/column highlighting when coordinates are inputted
 
 
-something might be off when a piece is moved into a position where it can no longer move, or when its getSurrounding, or when it
+
 runs into 
 Run= java -classpath .:target/dependency/* Main

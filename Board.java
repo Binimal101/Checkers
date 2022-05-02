@@ -105,9 +105,11 @@ public class Board implements java.io.Serializable {
 	}
 
 	//Matrix Manipulation and Checks
+
+	//returns int[][] of surrounding diagonal coordinates, will limit top and bottom coordinates from returning based on color
+	//doesn't check for surrounding coordinate validity, this is done in other methods
 	public int[][] getSurrounding(int x, int y, char color) {
 		HashSet<int[]> surrounding = new HashSet<>();
-		//x=7, y=0 runs and works problem is elsewere
 		
 		//Top Right
 		if(x != 0 && y < grid[x].length-1) {
@@ -137,7 +139,7 @@ public class Board implements java.io.Serializable {
 			}
 		} 
 		
-		if(surrounding.size() == 0) {
+		if(surrounding.size() == 0) { //Returns null if there are no spaces in bounds that piece at x, y surrounds
 			return null;
 			
 		} else {
@@ -148,10 +150,10 @@ public class Board implements java.io.Serializable {
 			for(int[] lst : surrounding) {
 				for(int elem : lst) {
 					fin[ctdp0][ctdp1] = elem;
-					ctdp1++; //inner depth- referring to each dimension in the array
+					ctdp1++; //inner depth- refferring to each dimension in the array
 				}
 				ctdp1 = 0;
-				ctdp0++; //outer depth
+				ctdp0++; //outer depth- reffering to each coordinate
 			}
 			
 			return fin;
@@ -159,8 +161,9 @@ public class Board implements java.io.Serializable {
 		
 	}
 	
-	//@Param (modifier) is the distance diagonal away
-	public String getDirection(int x, int y, int dx, int dy, int modifier) { //String length 2, signifies lateral and horizontal displacement from origin
+	//param (modifier) is the distance diagonal away
+	//returns String length 2, signifies lateral and horizontal displacement from origin
+	public String getDirection(int x, int y, int dx, int dy, int modifier) {
 		
 		//dx is top right of xy
 		if((x - modifier) == dx && (y + modifier) == dy){
@@ -221,7 +224,7 @@ public class Board implements java.io.Serializable {
 		}
 	}
 
-	//@returns (int[2]) represents the position in between (x, y) and (dx, dy)
+	//returns int[2], represents the position in between (x, y) and (dx, dy)
 	public int[] getIntermediaryPosition(int x, int y, int dx, int dy) {
 		String direction = getDirection(x, y, dx, dy, 2);
 		
@@ -291,8 +294,10 @@ public class Board implements java.io.Serializable {
 	}
 	
 	//Move Checks
-	public int[][] getJumpableMoves(int x, int y, char color) { //Will get the moves the piece can make along with 
-		char enemyColor = ((color == 'B' || color == 'b') ? 'w' : 'b'); //Enemy color will always be represented as lowercase
+
+	//returns int[][] containing only jumpable moves with piece at (x, y) based on its color
+	public int[][] getJumpableMoves(int x, int y, char color) {
+		char enemyColor = ((color == 'B' || color == 'b') ? 'w' : 'b'); //Enemy color will always be represented as lowercase for easier checks
 		
 		int[] finalPosition;
 		String direction;
@@ -322,6 +327,7 @@ public class Board implements java.io.Serializable {
 		
 		int[][] fin;
 		fin = moves.toArray(new int[moves.size()][2]);
+		
 		if(fin == null || fin.length == 0) { //return null instead of returning null arrays\ null.length doesn't exist
 			fin = null;
 		}
@@ -329,6 +335,7 @@ public class Board implements java.io.Serializable {
 		return fin;
 	}
 
+	//Returns int[][] of coordinate pairs of non-jumpable moves the piece at position (x, y) can make based on its color
 	public int[][] getMoves(int x, int y, char color) {
 		ArrayList<int[]> moves = new ArrayList<int[]>();
 		int[][] aroundPiece = getSurrounding(x, y, color);
@@ -337,7 +344,10 @@ public class Board implements java.io.Serializable {
 			int aroundX = aroundPiece[i][0];
 			int aroundY = aroundPiece[i][1];
 
-			if(grid[aroundX][aroundY] == null || grid[aroundX][aroundY].color != 'b' && grid[aroundX][aroundY].color != 'w') { //Not a checker object / free space
+			if(grid[aroundX][aroundY] == null || 
+			   Character.toLowerCase(grid[aroundX][aroundY].color) != 'b' &&
+			   Character.toLowerCase(grid[aroundX][aroundY].color) != 'w') { //Not a checker object / free space
+				
 				moves.add(aroundPiece[i]);
 			}
 		}
@@ -350,6 +360,8 @@ public class Board implements java.io.Serializable {
 	}
 	
 	//Move Logic
+
+	//Will be used to check for stalemates
 	public boolean canMove(char color) {
 		for(int row = 0; row < grid.length; row++) {
 			for(int column = 0; column < grid[row].length; column++) {
@@ -366,7 +378,8 @@ public class Board implements java.io.Serializable {
 		}
 		return false;
 	}
-	
+
+	//Will check for stalemates and force players to jump if they are able to
 	public boolean canJump(char color) {
 		for(int row = 0; row < grid.length; row++) {
 			for(int column = 0; column < grid[row].length; column++) {
@@ -384,10 +397,12 @@ public class Board implements java.io.Serializable {
 		return false;
 	}
 
+	//Will be used to check move validity
 	public boolean canMoveAt(int x, int y) {
 		return grid[x][y].moves != null;
 	}
-	
+
+	//Will be used to check move validity
 	public boolean canJumpAt(int x, int y) {
 		return grid[x][y].jumpableMoves != null;
 	}

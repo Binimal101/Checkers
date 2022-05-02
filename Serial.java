@@ -26,14 +26,15 @@ public class Serial<T> {
 
 	public T deserialize(String path) {
 		try {
-    			FileInputStream fileIn = new FileInputStream("saved/" + path + ".ser");
-     	 		ObjectInputStream in = new ObjectInputStream(fileIn);
+    		FileInputStream fileIn = new FileInputStream("saved/" + path + ".ser");
+     	 	ObjectInputStream in = new ObjectInputStream(fileIn);
+				
 			//Cast to type T and return
-      			object = (T) in.readObject();
+      		object = (T) in.readObject();
 			return object;
 			
-      		} catch (IOException i) {
-        		i.printStackTrace();
+      	} catch (IOException i) {
+        	i.printStackTrace();
 			
 		} catch (ClassNotFoundException i) {
 			i.printStackTrace();

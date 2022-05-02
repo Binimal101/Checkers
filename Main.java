@@ -11,8 +11,10 @@ public class Main {
 		do {
 			System.out.print("1: New Game\n2: Saved Game\n>>> ");
 			decision = input.nextLine();
+			
 			System.out.println();
 			System.out.println();
+			
 			CheckersGame.clearConsole();
 			
 		} while(!decision.equals("1") && !decision.equals("2"));
@@ -20,7 +22,7 @@ public class Main {
 		String path;
 		if(decision.equals("1")) {
 			CheckersGame game = new CheckersGame();
-			path = game.gameloop();
+			path = game.gameloop(); //Game will return path when done, allowing us to delete the file without using bullfoolery
 			
 		} else {
 			path = GameSave.getPath();

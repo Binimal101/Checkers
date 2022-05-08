@@ -113,13 +113,17 @@ public class CheckersGame {
 
 						if (board.canJumpAt(x, y)) {
 							do {
-								if (count == 0) {
-									System.out.println("You must continue to jump with the piece located at: (" + x + ", " + y + ")");
+								
+								if (count == 0) {		
+									int[] pl = board.toCartesian(x, y);
+									System.out.println("You must continue to jump with the piece located at: (" + pl[0] + ", " + pl[1] + ")");
 								} else {
 									System.out.println(jumpingNames[count] + " JUMP");
 								}
+								
 								// When asking for input, we can assume that they will be forced to enter dx, dy
 								// as x, y, so we don't ask for that
+								
 								int[] newJump = getMoveFromPlayer(currentPlayer, "Jump to");
 
 								dx = newJump[0];
@@ -267,7 +271,7 @@ public class CheckersGame {
 			return false;
 		}
 		
-    	return str.matches("[a-zA-Z]+");
+    	return str.matches("[a-zA-Z]+"); //matches follows regexive format
 	}
 
 	public static void clearConsole() {
